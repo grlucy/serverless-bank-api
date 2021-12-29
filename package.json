@@ -1,0 +1,13 @@
+{
+  "name": "serverless-bank",
+  "version": "1.0.0",
+  "description": "A serverless bank API",
+  "scripts": {
+    "start": "./node_modules/.bin/serverless offline start --stage dev"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.0.0"
+  },
+  "author": "Gina Lucy",
+  "license": "ISC"
+}

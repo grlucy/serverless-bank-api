@@ -1,0 +1,104 @@
+service: serverless-bank
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  environment:
+    ddbTableName: ${self:custom.ddbTableName}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": [ '${self:custom.ddbTableName}', Arn ]
+
+package:
+  individually: true
+  exclude:
+    - readme.md
+    - .serverless/**
+
+plugins:
+  - serverless-offline
+
+functions:
+  createAccount:
+    name: serverless-bank-createAccount
+    handler: api/createAccount.handler
+    events:
+      - http:
+          method: post
+          path: /account
+    memorySize: 128
+    timeout: 30
+    # role: ddbRole
+
+resources:
+  Resources:
+    bankTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ddbTableName}
+        KeySchema:
+          - AttributeName: account
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: account
+            AttributeType: N
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    # ddbRole:
+    #   Type: AWS::IAM::Role
+    #   Properties:
+    #     RoleName: serverless-bank-ddbRole
+    #     AssumeRolePolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Effect: Allow
+    #           Principal:
+    #             Service:
+    #               - lambda.amazonaws.com
+    #           Action: sts:AssumeRole
+    #     Policies:
+    #       - PolicyName: serverless-bank-Policy
+    #         PolicyDocument:
+    #           Version: '2012-10-17'
+    #           Statement:
+    #             - Effect: Allow
+    #               Action:
+    #                 - logs:CreateLogGroup
+    #                 - logs:CreateLogStream
+    #                 - logs:PutLogEvents
+    #               Resource:
+    #                 - 'Fn::Join':
+    #                   - ':'
+    #                   -
+    #                     - 'arn:aws:logs'
+    #                     - Ref: 'AWS::Region'
+    #                     - Ref: 'AWS::AccountId'
+    #                     - 'log-group:/aws/lambda/*:*:*'
+    #             - Effect: Allow
+    #               Action:
+    #                 - ec2:CreateNetworkInterface
+    #                 - ec2:DescribeNetworkInterfaces
+    #                 - ec2:DetachNetworkInterface
+    #                 - ec2:DeleteNetworkInterface
+    #               Resource: "*"
+
+custom:
+  serverless-offline:
+    noTimeout: true
+    host: 0.0.0.0
+    httpPort: 3001
+
+  ddbTableName: bankTable

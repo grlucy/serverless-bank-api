@@ -15,3 +15,5 @@ npm run start
 - https://www.serverless.com/framework/docs/getting-started
 - https://www.serverless.com/guides/dynamodb
 - https://serverless-stack.com/chapters/configure-dynamodb-in-serverless.html
+- https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/putitemcommand.html
+- https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-table-read-write.html

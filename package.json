@@ -5,9 +5,12 @@
   "scripts": {
     "start": "./node_modules/.bin/serverless offline start --stage dev"
   },
+  "author": "Gina Lucy",
+  "license": "ISC",
   "devDependencies": {
     "serverless-offline": "^8.0.0"
   },
-  "author": "Gina Lucy",
-  "license": "ISC"
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.45.0"
+  }
 }

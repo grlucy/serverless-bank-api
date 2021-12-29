@@ -40,6 +40,15 @@ functions:
           path: /account
     memorySize: 128
     timeout: 30
+  updateBalance:
+    name: serverless-bank-updateBalance
+    handler: api/updateBalance.handler
+    events:
+      - http:
+          method: put
+          path: /balance
+    memorySize: 128
+    timeout: 30
 
 resources:
   Resources:

@@ -49,6 +49,15 @@ functions:
           path: /balance
     memorySize: 128
     timeout: 30
+  getBalance:
+    name: serverless-bank-getBalance
+    handler: api/getBalance.handler
+    events:
+      - http:
+          method: get
+          path: /balance
+    memorySize: 128
+    timeout: 30
 
 resources:
   Resources:

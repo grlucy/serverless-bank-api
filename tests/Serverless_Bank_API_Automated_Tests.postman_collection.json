@@ -1,0 +1,898 @@
+{
+	"info": {
+		"_postman_id": "51461b60-2ab0-45d0-b0b2-cb43701ab024",
+		"name": "Serverless Bank API Automated Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createAccount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.json()",
+							"",
+							"pm.test('Expect status code 200 OK', function () {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"if (pm.response.code === 200) {",
+							"    // Test expected data structure",
+							"    pm.test('Expected response schema returned for 200 OK status', () => {",
+							"        pm.expect(resp.message).to.be.a('string')",
+							"        pm.expect(resp.account).to.be.a('string')",
+							"    })",
+							"",
+							"    // Test expected data content",
+							"    pm.test('Expected success message', () => {",
+							"        pm.expect(resp.message).to.equal('Created account')",
+							"    })",
+							"",
+							"    // Save the ID of the newly created account for following tests to use",
+							"    pm.collectionVariables.set('account', resp.account)",
+							"} else {",
+							"    // Since an account was not created, bail on following tests",
+							"    postman.setNextRequest(null)",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{bank-endpoint}}dev/account",
+					"host": [
+						"{{bank-endpoint}}dev"
+					],
+					"path": [
+						"account"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "createAccount (200)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/account",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"account"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "51"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:04:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Created account\",\n    \"account\": \"377726344\"\n}"
+				}
+			]
+		},
+		{
+			"name": "getBalance",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.json()",
+							"",
+							"pm.test('Expect status code 200 OK', function () {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"if (pm.response.code === 200) {",
+							"    // Test expected data structure",
+							"    pm.test('Expected response schema returned for 200 OK status', () => {",
+							"        pm.expect(resp.balance).to.be.a('number')",
+							"        pm.expect(resp.account).to.be.a('string')",
+							"    })",
+							"",
+							"    // Test expected data content",
+							"    pm.test('Expected response account to match query parameter', () => {",
+							"        pm.expect(resp.account).to.equal(pm.collectionVariables.get('account'))",
+							"    })",
+							"    pm.test('Expected balance to equal 0', () => {",
+							"        pm.expect(resp.balance).to.equal(0)",
+							"    })",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{bank-endpoint}}dev/balance?account={{account}}",
+					"host": [
+						"{{bank-endpoint}}dev"
+					],
+					"path": [
+						"balance"
+					],
+					"query": [
+						{
+							"key": "account",
+							"value": "{{account}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "getBalance (422 Error)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/balance",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"balance"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "29"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:23:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Missing parameter\"\n}"
+				},
+				{
+					"name": "getBalance (200)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/balance?account={{account}}",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"balance"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "36"
+						},
+						{
+							"key": "accept-ranges",
+							"value": "bytes"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 18:14:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"account\": \"362502909\",\n    \"balance\": 50\n}"
+				}
+			]
+		},
+		{
+			"name": "updateBalance",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.json()",
+							"",
+							"pm.test('Expect status code 200 OK', function () {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"if (pm.response.code === 200) {",
+							"    // Test expected data structure",
+							"    pm.test('Expected response schema returned for 200 OK status', () => {",
+							"        pm.expect(resp.message).to.be.a('string')",
+							"        pm.expect(resp.newBalance).to.be.a('number')",
+							"    })",
+							"",
+							"    // Test expected data content",
+							"    pm.test('Expected success message', () => {",
+							"        pm.expect(resp.message).to.equal('Updated balance')",
+							"    })",
+							"    pm.test('Expected new balance to equal 50', () => {",
+							"        pm.expect(resp.newBalance).to.equal(50)",
+							"    })",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{bank-endpoint}}dev/balance?account={{account}}&amount=50",
+					"host": [
+						"{{bank-endpoint}}dev"
+					],
+					"path": [
+						"balance"
+					],
+					"query": [
+						{
+							"key": "account",
+							"value": "{{account}}"
+						},
+						{
+							"key": "amount",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "updateBalance (200)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/balance?account={{account}}&amount=50",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"balance"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								},
+								{
+									"key": "amount",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "45"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:06:26 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Updated balance\",\n    \"newBalance\": 50\n}"
+				},
+				{
+					"name": "updateBalance (422 Error)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/balance?account={{account}}",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"balance"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								},
+								{
+									"key": "amount",
+									"value": "50",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "29"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:22:18 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Missing parameter\"\n}"
+				},
+				{
+					"name": "updateBalance (500 Error)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/balance?account=2&amount=50",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"balance"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "2"
+								},
+								{
+									"key": "amount",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "242"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 18:14:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Failed to update balance\",\n    \"error\": {\n        \"name\": \"ConditionalCheckFailedException\",\n        \"$fault\": \"client\",\n        \"$metadata\": {\n            \"httpStatusCode\": 400,\n            \"requestId\": \"CACT7RMAFC2OOPUVM9B204P873VV4KQNSO5AEMVJF66Q9ASUAAJG\",\n            \"attempts\": 1,\n            \"totalRetryDelay\": 0\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "deleteAccount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.json()",
+							"",
+							"pm.test('Expect status code 200 OK', function () {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"if (pm.response.code === 200) {",
+							"    // Test expected data structure",
+							"    pm.test('Expected response schema returned for 200 OK status', () => {",
+							"        pm.expect(resp.message).to.be.a('string')",
+							"        pm.expect(resp.account).to.be.a('string')",
+							"        pm.expect(resp.balance).to.be.a('number')",
+							"    })",
+							"",
+							"    // Test expected data content",
+							"    pm.test('Expected success message', () => {",
+							"        pm.expect(resp.message).to.equal('Deleted account')",
+							"    })",
+							"    pm.test('Expected response account to match query parameter', () => {",
+							"        pm.expect(resp.account).to.equal(pm.collectionVariables.get('account'))",
+							"    })",
+							"    pm.test('Expected balance to equal 50', () => {",
+							"        pm.expect(resp.balance).to.equal(50)",
+							"    })",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{bank-endpoint}}dev/account?account={{account}}",
+					"host": [
+						"{{bank-endpoint}}dev"
+					],
+					"path": [
+						"account"
+					],
+					"query": [
+						{
+							"key": "account",
+							"value": "{{account}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "deleteAccount (500 Error)",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/account?account={{account}}",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"account"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "242"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:08:50 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Failed to delete account\",\n    \"error\": {\n        \"name\": \"ConditionalCheckFailedException\",\n        \"$fault\": \"client\",\n        \"$metadata\": {\n            \"httpStatusCode\": 400,\n            \"requestId\": \"12NNDQVHTNEJVMOL0QTKHM5QO3VV4KQNSO5AEMVJF66Q9ASUAAJG\",\n            \"attempts\": 1,\n            \"totalRetryDelay\": 0\n        }\n    }\n}"
+				},
+				{
+					"name": "deleteAccount (200)",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/account?account={{account}}",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"account"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "63"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:12:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Deleted account\",\n    \"account\": \"362502909\",\n    \"balance\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "deleteAccount (500 Error)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.json()",
+							"",
+							"// Expect this request to return an error because we already deleted the account and can't delete it again",
+							"pm.test('Expect status code 500', function () {",
+							"    pm.response.to.have.status(500)",
+							"})",
+							"",
+							"if (pm.response.code === 500) {",
+							"    // Test expected data structure",
+							"    pm.test('Expected response schema returned for 500 error status', () => {",
+							"        pm.expect(resp.message).to.be.a('string')",
+							"        pm.expect(resp.error).to.be.an('object')",
+							"    })",
+							"",
+							"    // Test expected data content",
+							"    pm.test('Expected error message', () => {",
+							"        pm.expect(resp.message).to.equal('Failed to delete account')",
+							"    })",
+							"    pm.test('Expected error name to equal \"ConditionalCheckFailedException\"', () => {",
+							"        pm.expect(resp.error.name).to.equal('ConditionalCheckFailedException')",
+							"    })",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{bank-endpoint}}dev/account?account={{account}}",
+					"host": [
+						"{{bank-endpoint}}dev"
+					],
+					"path": [
+						"account"
+					],
+					"query": [
+						{
+							"key": "account",
+							"value": "{{account}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "deleteAccount (500 Error)",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/account?account={{account}}",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"account"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "242"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:08:50 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Failed to delete account\",\n    \"error\": {\n        \"name\": \"ConditionalCheckFailedException\",\n        \"$fault\": \"client\",\n        \"$metadata\": {\n            \"httpStatusCode\": 400,\n            \"requestId\": \"12NNDQVHTNEJVMOL0QTKHM5QO3VV4KQNSO5AEMVJF66Q9ASUAAJG\",\n            \"attempts\": 1,\n            \"totalRetryDelay\": 0\n        }\n    }\n}"
+				},
+				{
+					"name": "deleteAccount (200)",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/account?account={{account}}",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"account"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "{{account}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "63"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 Dec 2021 17:12:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Deleted account\",\n    \"account\": \"362502909\",\n    \"balance\": 0\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "account",
+			"value": ""
+		}
+	]
+}

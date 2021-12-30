@@ -1,4 +1,5 @@
 # Getting Started
+This project requires Node version 14+.
 
 To deploy to AWS, you must have an AWS account and credentials file. You should also install serverless globally. To deploy, run:
 ```
@@ -10,6 +11,23 @@ You must deploy to AWS before running locally so that all resources will be crea
 ```
 npm run start
 ```
+
+You must have the API running locally while you run the automated test collection. To run the automated test collection, open another CLI window and run:
+```
+npm run test
+```
+
+Husky uses a pre-push hook to ensure that all automated tests are passing before code can be successfully pushed to a branch. You must have the API running locally in order to push code since pushing code will automatically run the test collection.
+
+## Technologies Used
+- Serverless framework
+- serverless-offline plugin
+- AWS Lambda
+- AWS DynamoDB
+- AWS IAM
+- Postman
+- Newman
+- Husky
 
 ## Resources
 - https://www.serverless.com/framework/docs/getting-started

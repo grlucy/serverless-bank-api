@@ -27,8 +27,13 @@ module.exports.handler = async (event, context) => {
 
   try {
     const data = await client.send(new GetItemCommand(params))
-    response.statusCode = 200
-    response.body = JSON.stringify({ account: data.Item.account.N, balance: Number(data.Item.balance.N) })
+    if (!data.Item) {
+      response.statusCode = 404
+      response.body = JSON.stringify({ message: 'Failed to get balance', error: 'Account not found' })
+    } else {
+      response.statusCode = 200
+      response.body = JSON.stringify({ account: data.Item?.account.N, balance: Number(data.Item?.balance.N) })  
+    }
   } catch (error) {
     console.error('getBalance error:', error)
     response.statusCode = 500

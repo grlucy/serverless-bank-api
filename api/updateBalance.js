@@ -26,8 +26,10 @@ module.exports.handler = async (event, context) => {
     ExpressionAttributeValues: {
         ':num': { N: amount },
         ':initial': { N: '0' },
+        ':account': { N: account }
     },
-    ReturnValues: 'UPDATED_NEW'
+    ReturnValues: 'UPDATED_NEW',
+    ConditionExpression: 'account = :account'
   }
 
   try {

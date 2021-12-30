@@ -31,7 +31,7 @@ module.exports.handler = async (event, context) => {
   try {
     const data = await client.send(new DeleteItemCommand(params))
     response.statusCode = 200
-    response.body = JSON.stringify({ message: 'Deleted account', data })
+    response.body = JSON.stringify({ message: 'Deleted account', account: data.Attributes.account.N, balance: Number(data.Attributes?.balance.N) })
   } catch (error) {
     console.error('deleteAccount error:', error)
     response.statusCode = 500

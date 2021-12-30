@@ -58,6 +58,15 @@ functions:
           path: /balance
     memorySize: 128
     timeout: 30
+  deleteAccount:
+    name: serverless-bank-deleteAccount
+    handler: api/deleteAccount.handler
+    events:
+      - http:
+          method: delete
+          path: /account
+    memorySize: 128
+    timeout: 30
 
 resources:
   Resources:

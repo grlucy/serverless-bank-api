@@ -1,4 +1,4 @@
-const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb')
+const { DynamoDBClient, DeleteItemCommand } = require('@aws-sdk/client-dynamodb')
 const client = new DynamoDBClient()
 
 module.exports.handler = async (event, context) => {
@@ -17,22 +17,25 @@ module.exports.handler = async (event, context) => {
   }
 
   const params = {
-    ConsistentRead: true,
     TableName: process.env.ddbTableName,
     Key: {
         account: { N: account }
     },
-    ProjectionExpression: 'account,balance'
+    ReturnValues: 'ALL_OLD',
+    ConditionExpression: 'account = :account',
+    ExpressionAttributeValues: {
+        ':account': { N: account }
+    }
   }
 
   try {
-    const data = await client.send(new GetItemCommand(params))
+    const data = await client.send(new DeleteItemCommand(params))
     response.statusCode = 200
-    response.body = JSON.stringify({ account: data.Item.account.N, balance: Number(data.Item.balance.N) })
+    response.body = JSON.stringify({ message: 'Deleted account', data })
   } catch (error) {
-    console.error('getBalance error:', error)
+    console.error('deleteAccount error:', error)
     response.statusCode = 500
-    response.body = JSON.stringify({ message: 'Failed to get balance', error })
+    response.body = JSON.stringify({ message: 'Failed to delete account', error })
   }
   return response
 }

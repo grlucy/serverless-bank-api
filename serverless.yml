@@ -67,6 +67,15 @@ functions:
           path: /account
     memorySize: 128
     timeout: 30
+  getAccountList:
+    name: serverles-bank-getAccountList
+    handler: api/getAccountList.handler
+    events:
+      - http:
+          method: get
+          path: /account/list
+    memorySize: 128
+    timeout: 30
 
 resources:
   Resources:

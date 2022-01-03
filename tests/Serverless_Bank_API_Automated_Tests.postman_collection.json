@@ -526,6 +526,145 @@
 			]
 		},
 		{
+			"name": "getAccountList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.json()",
+							"",
+							"pm.test('Expect status code 200 OK', function () {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"if (pm.response.code === 200) {",
+							"    // Test expected data structure",
+							"    pm.test(\"Expected response schema returned for 200 OK status\", () => {",
+							"        // Use AJV to validate response against schema",
+							"        const Ajv = require('ajv')",
+							"        const ajv = new Ajv({logger: console})",
+							"        const schema = {",
+							"            \"required\": [",
+							"                \"accounts\"",
+							"            ],",
+							"            \"properties\": {",
+							"                \"accounts\": {",
+							"                    \"items\": {",
+							"                        \"required\": [",
+							"                            \"account\",",
+							"                            \"balance\"",
+							"                        ],",
+							"                        \"properties\": {",
+							"                            \"account\": {",
+							"                                \"$id\": \"#/properties/accounts/items/properties/account\",",
+							"                                \"type\": \"string\"",
+							"                            },",
+							"                            \"balance\": {",
+							"                                \"$id\": \"#/properties/accounts/items/properties/balance\",",
+							"                                \"type\": \"integer\"",
+							"                            }",
+							"                        },",
+							"                        \"$id\": \"#/properties/accounts/items\",",
+							"                        \"type\": \"object\"",
+							"                    },",
+							"                    \"$id\": \"#/properties/accounts\",",
+							"                    \"type\": \"array\"",
+							"                }",
+							"            },",
+							"            \"type\": \"object\"",
+							"        }",
+							"        pm.expect(ajv.validate(schema, resp), ajv.errors ? `${ajv.errors[0].dataPath} ${ajv.errors[0].message}` : '').to.be.true",
+							"    })",
+							"",
+							"    // Test expected data content",
+							"    const testAccount = resp.accounts.filter(item => item.account === pm.collectionVariables.get('account'))",
+							"    pm.test('Expected response to contain test account', () => {",
+							"        pm.expect(testAccount.length).to.equal(1)",
+							"    })",
+							"    pm.test('Expected test account balance to equal 50', () => {",
+							"        pm.expect(testAccount[0]?.balance).to.equal(50)",
+							"    })",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{bank-endpoint}}dev/account/list",
+					"host": [
+						"{{bank-endpoint}}dev"
+					],
+					"path": [
+						"account",
+						"list"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "getAccountList (200)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bank-endpoint}}dev/account/list",
+							"host": [
+								"{{bank-endpoint}}dev"
+							],
+							"path": [
+								"account",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "access-control-allow-credentials",
+							"value": "true"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "cache-control",
+							"value": "no-cache"
+						},
+						{
+							"key": "content-length",
+							"value": "87"
+						},
+						{
+							"key": "accept-ranges",
+							"value": "bytes"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 03 Jan 2022 15:56:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"accounts\": [\n        {\n            \"account\": \"897650607\",\n            \"balance\": 50\n        },\n        {\n            \"account\": \"424043114\",\n            \"balance\": 0\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
 			"name": "deleteAccount",
 			"event": [
 				{

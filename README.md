@@ -1,4 +1,7 @@
 # Getting Started
+
+## API
+
 This project requires Node version 14+.
 
 To deploy to AWS, you must have an AWS account and credentials file. You should also install serverless globally. To deploy, run:
@@ -35,3 +38,4 @@ Husky uses a pre-push hook to ensure that all automated tests are passing before
 - https://serverless-stack.com/chapters/configure-dynamodb-in-serverless.html
 - https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/putitemcommand.html
 - https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-table-read-write.html
+- https://techbrij.com/brijpad/#json

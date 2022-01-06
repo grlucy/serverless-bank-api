@@ -22,6 +22,17 @@ npm run test
 
 Husky uses a pre-push hook to ensure that all automated tests are passing before code can be successfully pushed to a branch. You must have the API running locally in order to push code since pushing code will automatically run the test collection.
 
+To remove the deployed service from the provider (AWS), including all lambdas and DynamoDB table, run:
+```
+serverless remove
+```
+
+## UI
+
+```
+npm i -g @vue/cli
+```
+
 ## Technologies Used
 - Serverless framework
 - serverless-offline plugin
@@ -39,3 +50,4 @@ Husky uses a pre-push hook to ensure that all automated tests are passing before
 - https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/putitemcommand.html
 - https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-table-read-write.html
 - https://techbrij.com/brijpad/#json
+- https://youtu.be/FXpIoQ_rT_c

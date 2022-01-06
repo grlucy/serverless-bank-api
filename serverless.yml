@@ -38,6 +38,7 @@ functions:
       - http:
           method: post
           path: /account
+          cors: true
     memorySize: 128
     timeout: 30
   updateBalance:
@@ -47,6 +48,7 @@ functions:
       - http:
           method: put
           path: /balance
+          cors: true
     memorySize: 128
     timeout: 30
   getBalance:
@@ -56,6 +58,7 @@ functions:
       - http:
           method: get
           path: /balance
+          cors: true
     memorySize: 128
     timeout: 30
   deleteAccount:
@@ -65,15 +68,17 @@ functions:
       - http:
           method: delete
           path: /account
+          cors: true
     memorySize: 128
     timeout: 30
   getAccountList:
-    name: serverles-bank-getAccountList
+    name: serverless-bank-getAccountList
     handler: api/getAccountList.handler
     events:
       - http:
           method: get
           path: /account/list
+          cors: true
     memorySize: 128
     timeout: 30
 

@@ -5,108 +5,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serverless Bank</title>
-
-    <style>
-        #app {
-            text-align: center;
-        }
-        .cardContainer {
-            width: 90vw;
-            margin: 50px auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px 30px;
-        }
-        .card {
-            width: 300px;
-            padding: 25px;
-            border: 1px solid black;
-            border-radius: 5px;
-        }
-        .cardBtn {
-            padding: 5px 8px;
-            margin: 4px;
-            border: 1px solid black;
-            border-radius: 5px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 5px 15px;
-            margin: 4px;
-            border: 1px solid black;
-            border-radius: 5px;
-        }
-    </style>
-
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
     <div id="app">
         <h3>SERVERLESS BANK</h3>
-        <h1>Customer Accounts</h1>
-        <div class="cardContainer">
-            <div class="card">
-                <h4>123456789</h4>
-                <h2>$XX,XXX,XXX.XX</h2>
-                <hr>
-                <div class="cardBtn">
-                    Make a deposit/withdrawal
-                </div>
-                <div class="cardBtn">
-                    Close this account
-                </div>
+        <div id="message" v-if="message" class="topMargin50">
+            <h4>{{message}}</h4>
+            <div class="btn topMargin50" @click="message = null">OK</div>
+        </div>    
+        <div id="transactions" v-else-if="selectedAccount">
+            <h1>New Transaction</h1>
+            <h4>Transaction Type:</h4>
+            <select name="transactionType" id="transactionType" v-model="transactionType">
+                <option value="Deposit">Deposit</option>
+                <option value="Withdrawal">Withdrawal</option>
+            </select>
+            <h4>Amount:</h4>
+            <div id="amountDiv">
+                <span id="amountLabel">$&nbsp;</span>
+                <span id="amountInput"><input name="amount" id="amount" v-model="transactionAmount" type="number" placeholder="0.00"></span>
             </div>
-            <div class="card">
-                <h4>123456789</h4>
-                <h2>$XX,XXX,XXX.XX</h2>
-                <hr>
-                <div class="cardBtn">
-                    Make a deposit/withdrawal
-                </div>
-                <div class="cardBtn">
-                    Close this account
-                </div>
-            </div>
-            <div class="card">
-                <h4>123456789</h4>
-                <h2>$XX,XXX,XXX.XX</h2>
-                <hr>
-                <div class="cardBtn">
-                    Make a deposit/withdrawal
-                </div>
-                <div class="cardBtn">
-                    Close this account
-                </div>
-            </div>
-            <div class="card">
-                <h4>123456789</h4>
-                <h2>$XX,XXX,XXX.XX</h2>
-                <hr>
-                <div class="cardBtn">
-                    Make a deposit/withdrawal
-                </div>
-                <div class="cardBtn">
-                    Close this account
-                </div>
-            </div>
-            <div class="card">
-                <h4>123456789</h4>
-                <h2>$XX,XXX,XXX.XX</h2>
-                <hr>
-                <div class="cardBtn">
-                    Make a deposit/withdrawal
-                </div>
-                <div class="cardBtn">
-                    Close this account
-                </div>
-            </div>                
+            <div class="btn topMargin50" @click="updateBalance(selectedAccount, transactionType, transactionAmount)">SUBMIT</div>
+            <div class="btn topMargin50" @click="clearSelected">CANCEL</div>
         </div>
-        <div class="btn">
-            OPEN A NEW ACCOUNT
+        <div id="customerAccounts" v-else>
+            <h1>Customer Accounts</h1>
+            <div class="cardContainer" v-if="accounts.length > 0">
+                <div class="card" v-for="item in accounts" :key="item.account">
+                    <h4>{{item.account}}</h4>
+                    <h2>{{numToUSD(item.balance)}}</h2>
+                    <hr>
+                    <div class="cardBtn" @click="selectedAccount = item.account">
+                        Make a deposit/withdrawal
+                    </div>
+                    <div class="cardBtn" @click="deleteAccount(item.account)">
+                        Close this account
+                    </div>
+                </div>              
+            </div>
+            <p v-else class="topMargin50">
+                No customer accounts found
+            </p>
+            <div :class="accounts.length >= 10 ? 'disabledBtn' : 'btn'" @click="createAccount">
+                OPEN A NEW ACCOUNT
+            </div>
+            <p>
+                <i>* Limit 10 accounts per customer</i>
+            </p>    
         </div>
-        <p>
-            <i>* Limit 10 accounts per customer</i>
-        </p>
     </div>
+
+    <!-- <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script> -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="app.js"></script>
 </body>
 </html>

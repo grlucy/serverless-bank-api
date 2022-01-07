@@ -33,6 +33,13 @@ serverless remove
 npm i -g @vue/cli
 ```
 
+To run the UI locally:
+```
+cd serverless-bank-ui/
+npm i
+npm run serve
+```
+
 ## Technologies Used
 - Serverless framework
 - serverless-offline plugin

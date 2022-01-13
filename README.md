@@ -33,7 +33,7 @@ serverless remove
 npm i -g @vue/cli
 ```
 
-To run the UI locally:
+To run the UI locally, you'll need a .env file in the serverless-bank-ui directory with a variable "VUE_APP_BANK_ENDPOINT". If you are running the API locally, you can set this equal to "http://localhost:3001/"; otherwise, use your deployed endpoint. Then run:
 ```
 cd serverless-bank-ui/
 npm i
@@ -49,6 +49,8 @@ npm run serve
 - Postman
 - Newman
 - Husky
+- Vue 3
+- Vue CLI
 
 ## Resources
 - https://www.serverless.com/framework/docs/getting-started

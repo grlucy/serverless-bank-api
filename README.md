@@ -4,18 +4,23 @@
 
 This project requires Node version 14+.
 
-To deploy to AWS, you must have an AWS account and credentials file. You should also install serverless globally. To deploy, run:
+To deploy to AWS, you must have an AWS account and config/credentials files, which can be set up while installing AWS CLI. You should also install serverless globally.
+
+To deploy, run:
+
 ```
 npm i
 serverless deploy
 ```
 
 You must deploy to AWS before running locally so that all resources will be created. To run the API locally using serverless-offline:
+
 ```
 npm run start
 ```
 
 You must have the API running locally while you run the automated test collection. To run the automated test collection, open another CLI window and run:
+
 ```
 npm run test
 ```
@@ -23,6 +28,7 @@ npm run test
 Husky uses a pre-push hook to ensure that all automated tests are passing before code can be successfully pushed to a branch. You must have the API running locally in order to push code since pushing code will automatically run the test collection.
 
 To remove the deployed service from the provider (AWS), including all lambdas and DynamoDB table, run:
+
 ```
 serverless remove
 ```
@@ -34,6 +40,7 @@ npm i -g @vue/cli
 ```
 
 To run the UI locally, you'll need a .env file in the serverless-bank-ui directory with a variable "VUE_APP_BANK_ENDPOINT". If you are running the API locally, you can set this equal to "http://localhost:3001/"; otherwise, use your deployed endpoint. Then run:
+
 ```
 cd serverless-bank-ui/
 npm i
@@ -41,6 +48,7 @@ npm run serve
 ```
 
 ## Technologies Used
+
 - Serverless framework
 - serverless-offline plugin
 - AWS Lambda
@@ -53,6 +61,7 @@ npm run serve
 - Vue CLI
 
 ## Resources
+
 - https://www.serverless.com/framework/docs/getting-started
 - https://www.serverless.com/guides/dynamodb
 - https://serverless-stack.com/chapters/configure-dynamodb-in-serverless.html

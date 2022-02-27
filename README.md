@@ -47,6 +47,19 @@ npm i
 npm run serve
 ```
 
+This Vue app is live on Github pages at https://grlucy.github.io/serverless-bank-api/
+
+Updates are published by running:
+
+```
+cd serverless-bank-ui
+npm run build
+git add dist
+git commit -m 'add dist subtree'
+cd ../
+git subtree push --prefix serverless-bank-ui/dist origin gh-pages
+```
+
 ## Technologies Used
 
 - Serverless framework
@@ -69,3 +82,4 @@ npm run serve
 - https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-table-read-write.html
 - https://techbrij.com/brijpad/#json
 - https://youtu.be/FXpIoQ_rT_c
+- https://learnvue.co/2020/09/how-to-deploy-your-vue-app-to-github-pages/#tip-handling-vue-router-with-a-custom-404-page

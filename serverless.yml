@@ -1,5 +1,4 @@
 service: serverless-bank
-frameworkVersion: '2'
 
 provider:
   name: aws
@@ -19,7 +18,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - "Fn::GetAtt": [ '${self:custom.ddbTableName}', Arn ]
+        - "Fn::GetAtt": ["${self:custom.ddbTableName}", Arn]
 
 package:
   individually: true

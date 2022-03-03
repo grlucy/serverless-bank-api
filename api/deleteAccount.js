@@ -35,7 +35,7 @@ module.exports.handler = async (event, context) => {
   } catch (error) {
     console.error('deleteAccount error:', error)
     response.statusCode = 500
-    response.body = JSON.stringify({ message: 'Failed to delete account', error })
+    response.body = JSON.stringify({ message: 'Failed to delete account', error: { name: error.name } })
   }
   return response
 }

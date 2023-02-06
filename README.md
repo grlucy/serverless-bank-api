@@ -60,6 +60,10 @@ cd ../
 git subtree push --prefix serverless-bank-ui/dist origin gh-pages
 ```
 
+## Demo
+
+![Serverless Bank Demo](./Serverless-Bank-demo.gif)
+
 ## Technologies Used
 
 - Serverless framework
